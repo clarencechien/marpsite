@@ -36,25 +36,42 @@ jobs:
 
       - name: Generate summary.html
         run: |
-          # Ensure html directory exists (it should, but good practice)
+          # Ensure html directory exists
           mkdir -p html
 
           # Create summary.html inside html/
-          echo "<html><head><title>Presentation Summary</title></head><body>" > html/summary.html
+          echo "<!DOCTYPE html>" > html/summary.html
+          echo "<html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Presentation Summary</title>" >> html/summary.html
+          echo "<style>" >> html/summary.html
+          echo "  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f8f9fa; color: #212529; line-height: 1.6; }" >> html/summary.html
+          echo "  .container { max-width: 800px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }" >> html/summary.html
+          echo "  h1 { color: #343a40; margin-bottom: 20px; text-align: center; }" >> html/summary.html
+          echo "  ul { list-style-type: none; padding: 0; }" >> html/summary.html
+          echo "  li.presentation-item { background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; margin-bottom: 15px; padding: 15px; }" >> html/summary.html
+          echo "  li.presentation-item b { font-size: 1.2em; color: #007bff; }" >> html/summary.html
+          echo "  ul.links { list-style-type: none; padding-left: 20px; margin-top: 10px; }" >> html/summary.html
+          echo "  ul.links li { margin-bottom: 8px; }" >> html/summary.html
+          echo "  a { color: #007bff; text-decoration: none; }" >> html/summary.html
+          echo "  a:hover { text-decoration: underline; }" >> html/summary.html
+          echo "</style>" >> html/summary.html
+          echo "</head><body>" >> html/summary.html
+          echo "<div class='container'>" >> html/summary.html
           echo "<h1>Presentation Summary</h1><ul>" >> html/summary.html
+
           for mdfile in $(find report/ -name '*.md' -type f); do
             BASENAME=$(basename "$mdfile" .md)
-            # Links relative to html/summary.html
             HTML_FILE_RELATIVE_PATH="./$BASENAME.html"
             PPTX_FILE_RELATIVE_PATH="../output/$BASENAME.pptx"
 
-            echo "<li><b>$BASENAME.md</b>" >> html/summary.html
-            echo "<ul>" >> html/summary.html
-            echo "<li><a href='$HTML_FILE_RELATIVE_PATH'>View HTML</a></li>" >> html/summary.html
+            echo "<li class='presentation-item'><b>$BASENAME.md</b>" >> html/summary.html
+            echo "<ul class='links'>" >> html/summary.html
+            echo "<li><a href='$HTML_FILE_RELATIVE_PATH'>View HTML Presentation</a></li>" >> html/summary.html
             echo "<li><a href='$PPTX_FILE_RELATIVE_PATH'>Download PPTX</a></li>" >> html/summary.html
             echo "</ul></li>" >> html/summary.html
           done
-          echo "</ul></body></html>" >> html/summary.html
+
+          echo "</ul></div>" >> html/summary.html
+          echo "</body></html>" >> html/summary.html
         shell: bash
 
       - name: Commit generated files
