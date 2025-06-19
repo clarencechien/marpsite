@@ -36,26 +36,32 @@ jobs:
 
       - name: Generate summary.html
         run: |
-          echo "<html><head><title>Presentation Summary</title></head><body>" > summary.html
-          echo "<h1>Presentation Summary</h1><ul>" >> summary.html
+          # Ensure html directory exists (it should, but good practice)
+          mkdir -p html
+
+          # Create summary.html inside html/
+          echo "<html><head><title>Presentation Summary</title></head><body>" > html/summary.html
+          echo "<h1>Presentation Summary</h1><ul>" >> html/summary.html
           for mdfile in $(find report/ -name '*.md' -type f); do
             BASENAME=$(basename "$mdfile" .md)
-            HTML_FILE="html/$BASENAME.html"
-            PPTX_FILE="output/$BASENAME.pptx"
-            echo "<li><b>$BASENAME.md</b>" >> summary.html
-            echo "<ul>" >> summary.html
-            echo "<li><a href='$HTML_FILE'>View HTML</a></li>" >> summary.html
-            echo "<li><a href='$PPTX_FILE'>Download PPTX</a></li>" >> summary.html
-            echo "</ul></li>" >> summary.html
+            # Links relative to html/summary.html
+            HTML_FILE_RELATIVE_PATH="./$BASENAME.html"
+            PPTX_FILE_RELATIVE_PATH="../output/$BASENAME.pptx"
+
+            echo "<li><b>$BASENAME.md</b>" >> html/summary.html
+            echo "<ul>" >> html/summary.html
+            echo "<li><a href='$HTML_FILE_RELATIVE_PATH'>View HTML</a></li>" >> html/summary.html
+            echo "<li><a href='$PPTX_FILE_RELATIVE_PATH'>Download PPTX</a></li>" >> html/summary.html
+            echo "</ul></li>" >> html/summary.html
           done
-          echo "</ul></body></html>" >> summary.html
+          echo "</ul></body></html>" >> html/summary.html
         shell: bash
 
       - name: Commit generated files
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add summary.html html/ output/
+          git add html/summary.html html/ output/ # summary.html is now in html/
           # Check if there are changes to commit
           if git diff --staged --quiet; then
             echo "No changes to commit."
