@@ -1,0 +1,52 @@
+name: Marp Converter
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'report/**.md'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Marp CLI
+        run: npm install -g @marp-team/marp-cli
+
+      - name: Convert Markdown files
+        run: |
+          mkdir -p output html
+          for file in $(find report/ -name '*.md'); do
+            BASENAME=$(basename "$file" .md)
+            echo "Processing $file -> output/$BASENAME.pptx, html/$BASENAME.html"
+            marp --allow-local-files --pptx "$file" -o "output/$BASENAME.pptx"
+            marp --allow-local-files --html "$file" -o "html/$BASENAME.html"
+          done
+
+      - name: Upload HTML artifact for deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./html
+
+  deploy:
+    needs: convert
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
