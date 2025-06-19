@@ -10,6 +10,8 @@ on:
 jobs:
   convert:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -31,6 +33,39 @@ jobs:
             marp --allow-local-files --pptx "$file" -o "output/$BASENAME.pptx"
             marp --allow-local-files --html "$file" -o "html/$BASENAME.html"
           done
+
+      - name: Generate summary.html
+        run: |
+          echo "<html><head><title>Presentation Summary</title></head><body>" > summary.html
+          echo "<h1>Presentation Summary</h1><ul>" >> summary.html
+          for mdfile in $(find report/ -name '*.md' -type f); do
+            BASENAME=$(basename "$mdfile" .md)
+            HTML_FILE="html/$BASENAME.html"
+            PPTX_FILE="output/$BASENAME.pptx"
+            echo "<li><b>$BASENAME.md</b>" >> summary.html
+            echo "<ul>" >> summary.html
+            echo "<li><a href='$HTML_FILE'>View HTML</a></li>" >> summary.html
+            echo "<li><a href='$PPTX_FILE'>Download PPTX</a></li>" >> summary.html
+            echo "</ul></li>" >> summary.html
+          done
+          echo "</ul></body></html>" >> summary.html
+        shell: bash
+
+      - name: Commit generated files
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add summary.html html/ output/
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "docs: Auto-generate presentation files and summary
+
+          [skip ci] - Add this to prevent workflow recursion if not handled by path filtering"
+            git push
+          fi
+        shell: bash
 
       - name: Upload HTML artifact for deployment
         uses: actions/upload-pages-artifact@v3
