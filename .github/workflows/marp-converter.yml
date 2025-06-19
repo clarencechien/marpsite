@@ -13,6 +13,12 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Install Chinese fonts
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y fonts-noto-cjk
+        shell: bash
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -61,12 +67,12 @@ jobs:
           for mdfile in $(find report/ -name '*.md' -type f); do
             BASENAME=$(basename "$mdfile" .md)
             HTML_FILE_RELATIVE_PATH="./$BASENAME.html"
-            PPTX_FILE_RELATIVE_PATH="../output/$BASENAME.pptx"
+            PPTX_FILE_ABSOLUTE_PATH="https://raw.githubusercontent.com/clarencechien/marpsite/main/output/$BASENAME.pptx" # Changed line
 
             echo "<li class='presentation-item'><b>$BASENAME.md</b>" >> html/summary.html
             echo "<ul class='links'>" >> html/summary.html
             echo "<li><a href='$HTML_FILE_RELATIVE_PATH'>View HTML Presentation</a></li>" >> html/summary.html
-            echo "<li><a href='$PPTX_FILE_RELATIVE_PATH'>Download PPTX</a></li>" >> html/summary.html
+            echo "<li><a href='$PPTX_FILE_ABSOLUTE_PATH'>Download PPTX</a></li>" >> html/summary.html # Use the new variable
             echo "</ul></li>" >> html/summary.html
           done
 
