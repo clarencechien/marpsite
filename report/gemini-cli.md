@@ -1,11 +1,31 @@
 ---
 marp: true
 theme: default
+style: |
+  h1 {
+    font-size: 60px;
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 44px;
+    font-weight: 600;
+  }
+  section.lead h1 {
+    font-size: 80px;
+  }
+  p, li {
+    font-size: 24px;
+    line-height: 1.6;
+  }
+  blockquote p, blockquote li {
+    font-size: 24px;
+    line-height: 1.7;
+  }
 ---
 
 <!-- _class: lead -->
 
-![bg left:33%](https://source.unsplash.com/random/1920x1080?code,terminal)
+![bg left:33%](https://images.unsplash.com/photo-1626362814904-d27009a10da7?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
 
 
 # **Google Gemini CLI 深度解析**
@@ -76,17 +96,18 @@ theme: default
 
 ## **實際應用：一個完整的開發工作流程**
 
-![bg right:40%](https://source.unsplash.com/random/1920x1080?workflow,automation)
-
-
 1.  **程式碼庫上手 (Onboarding)**
     `> Explore and describe the project architecture.`
+
 2.  **錯誤調查 (Bug Investigation)**
     `> Analyze GitHub issue #1 and propose a fix.`
+
 3.  **程式碼實作 (Implementation)**
     `> Proceed with the plan.`
+
 4.  **測試生成 (Test Generation)**
     `> Write a pytest unit test for this change.`
+
 5.  **文件撰寫 (Documentation)**
     `> Write a markdown summary of the fix.`
 
@@ -115,7 +136,7 @@ theme: default
 
 ## **競爭舞台：主要對手比較**
 
-![bg](https://source.unsplash.com/random/1920x1080?strategy,chess)
+![bg right:33%](https://plus.unsplash.com/premium_photo-1675762226695-bec5748d4d00?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)
 
 
 *   **Anthropic Claude Code**
@@ -131,7 +152,11 @@ theme: default
     *   **優勢**: 深度整合 PowerShell 與 Azure 生態系。
 
 ---
-
+<style scoped>
+section {
+  font-size: 22px; /* 嘗試不同的數值直到符合需求 */
+}
+</style>
 ## **代理人式 CLI 比較分析**
 
 | 特性 | **Google Gemini CLI** | **Anthropic Claude Code** | **OpenAI Codex CLI** | **Microsoft AI Shell** |
