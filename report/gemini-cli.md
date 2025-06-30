@@ -81,16 +81,12 @@ theme: default
 
 1.  **程式碼庫上手 (Onboarding)**
     `> Explore and describe the project architecture.`
-
 2.  **錯誤調查 (Bug Investigation)**
     `> Analyze GitHub issue #1 and propose a fix.`
-
 3.  **程式碼實作 (Implementation)**
     `> Proceed with the plan.`
-
 4.  **測試生成 (Test Generation)**
     `> Write a pytest unit test for this change.`
-
 5.  **文件撰寫 (Documentation)**
     `> Write a markdown summary of the fix.`
 
@@ -154,7 +150,7 @@ theme: default
     *   將 Gemini 的智慧能力嵌入到 Google 的**整個產品矩陣**中。
 
 *   **Gemini CLI 的角色**
-    *   扮演**先鋒**，在最基礎的終端層面牢牢抓住開發者的工作流程。
+    *   扮演「**先鋒**」，在最基礎的終端層面牢牢抓住開發者的工作流程。
 
 *   **打造無縫的生態系**
     *   **與 Gemini Code Assist (IDE) 整合**：共享使用額度，打造統一開發環境。
